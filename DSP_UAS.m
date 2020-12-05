@@ -9,22 +9,22 @@ disp('Audio Playing.')
 myRecording = getaudiodata(recorder);
 figure(1)
 plot(myRecording);
-yx = fft(myRecording);
-xx = linspace(0,fs,length(myRecording));
+y = fft(myRecording);
+x = linspace(0,fs,length(myRecording));
 figure(2);
-plot(xx(1:length(yx)/2),abs(yx(1:length(yx)/2)));
-sound(myRecording,fs);
+plot(x(1:length(y)/2),abs(y(1:length(y)/2)));
+%sound(myRecording,fs);
 
-fc1 = 300;
-fc2 = 4000;
+fc1 = 150;
+fc2 = 6000;
 b = fir1(48,[fc1 fc2]/(fs/2),'bandpass');
 fvtool(b,1);
 z = filter(b,1,myRecording);
 
-zx = fft(z);
+z_fft = fft(z);
 figure(3);
-plot(xx(1:length(yx)/2),abs(zx(1:length(zx)/2)));
-sound(z,fs);
+plot(x(1:length(y)/2),abs(z_fft(1:length(z_fft)/2)));
+%sound(z,fs);
 figure(4);
 plot(z);
 
@@ -39,4 +39,43 @@ end
 
 figure(5);
 plot(silence_remove);
+
+
+recorder = audiorecorder(fs,8,1);
+disp('Start speaking.')
+recordblocking(recorder,2);
+disp('Stop Speaking.')
+disp('Audio Playing.')
+myRecording2 = getaudiodata(recorder);
+figure(6)
+plot(myRecording2);
+y = fft(myRecording2);
+x = linspace(0,fs,length(myRecording2));
+figure(7);
+plot(x(1:length(y)/2),abs(y(1:length(y)/2)));
+%sound(myRecording2,fs);
+
+z2 = filter(b,1,myRecording2);
+
+z2_fft = fft(z2);
+figure(8);
+plot(x(1:length(y)/2),abs(z2_fft(1:length(z2_fft)/2)));
+%sound(z2,fs);
+figure(9);
+plot(z2);
+
+silence_remove_2 = [];
+count = 1;
+for k=1:length(z2)
+    if(z2(k) ~= 0)
+        silence_remove_2(count) = z2(k);
+        count = count + 1;
+    end
+end
+
+figure(10);
+plot(silence_remove_2);
+
+
+
 
