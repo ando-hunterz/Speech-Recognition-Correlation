@@ -1,7 +1,7 @@
 close all;
 
 fs=24000;
-recorder = audiorecorder(fs,8,1);
+recorder = audiorecorder(fs,16,1);
 disp('Start speaking.')
 recordblocking(recorder,2);
 disp('Stop Speaking.')
@@ -15,8 +15,8 @@ figure(2);
 plot(x(1:length(y)/2),abs(y(1:length(y)/2)));
 %sound(myRecording,fs);
 
-fc1 = 150;
-fc2 = 6000;
+fc1 = 500;
+fc2 = 4000;
 b = fir1(48,[fc1 fc2]/(fs/2),'bandpass');
 fvtool(b,1);
 z = filter(b,1,myRecording);
@@ -77,5 +77,7 @@ figure(10);
 plot(silence_remove_2);
 
 
+figure(11);
+plot(xcorr(silence_remove,silence_remove_2));
 
 
